@@ -1,89 +1,108 @@
-# Web Technologies: MERN Stack Lab Test
+Backend and frontend -- npm install
+.env update
+PORT=5000
+MONGO_URI=mongodb+srv://admin:admin123@cluster0.zvemayj.mongodb.net/db?appName=Cluster0
+Error - mongoose.connect(process.env.MONGO_URI)
+Srv off
+npm start or node server.js
+Update modle = module.exports = mongoose.model('Item', itemSchema);
+Update route= module.exports = router;
 
-## Instructions
 
-You are provided with a starter MERN (MongoDB, Express, React, Node.js) **Item Manager** project. Your task is to complete the application, add new features, deploy it, and submit the final artifacts.
 
-**Time Limit**: 2 Hours
-**Total Marks**: 100
 
----
 
-## Part 1: Backend Completion (30 Marks)
+FRONT END
+Vite .env File ---> VITE_API_URL=http://localhost:5000/api/items --> const PORT = process.env.PORT || 5000; + app.use('/api/items', itemsRouter);
+npm install axios(nothibboth)
+npx vite (to run)
 
-The provided backend code is incomplete. You need to fix it and extend the data model.
 
-1.  **Database Connection (5 Marks)**
-    *   Create a MongoDB Atlas cluster (if you haven't already).
-    *   Set up an environment variable file (`.env`) in the `backend` directory.
-    *   Connect the backend to your MongoDB Atlas database.
+type="number"
+type=”text”
+App.jsx
 
-2.  **Model Extension (10 Marks)**
-    *   Open `backend/models/Item.js`.
-    *   The current model only has `name` (String, required) and `price` (Number, required).
-    *   **Task**: Add two new fields to the schema:
-        *   `description` (String, required)
-        *   `category` (String, required, enum: ['Electronics', 'Clothing', 'Food', 'Other'])
 
-3.  **API Routes Completion (15 Marks)**
-    *   Open `backend/routes/items.js`.
-    *   The `GET /` (fetch all) and `POST /` (create) routes are provided.
-    *   **Task**: Implement the missing `DELETE /:id` route to allow deleting an item by its ID.
-    *   **Task**: Update the `POST /` route to handle the new `description` and `category` fields you added to the model.
+const handleDelete = async (id) => {
+ await axios.delete(`http://localhost:5000/api/items/${id}`);
 
----
 
-## Part 2: Frontend Completion (30 Marks)
+ 
+Git hub
+Readme tick off
+Git ignorenode_modules/
+.env
 
-The frontend is a Vite + React application. It currently can fetch and create items, but it is missing the new fields and the delete functionality.
 
-1.  **UI Modification (15 Marks)**
-    *   Open `frontend/src/App.jsx`.
-    *   **Task**: Update the "Add Item" form to include input fields for `description` (textarea or text input) and `category` (dropdown/select).
-    *   **Task**: Ensure these new fields are properly sent to the backend when the form is submitted.
+git init
+git add .
+git commit -m "My First MERN Project"
+git branch -M main
+git remote add origin https://github.com/YourName/MERN-Lab-Test.git
+git push -u origin main
 
-2.  **Displaying New Data (10 Marks)**
-    *   Update the item list display in `App.jsx` to show the `description` and `category` of each item along with the `name` and `price`.
 
-3.  **Delete Functionality (5 Marks)**
-    *   **Task**: Add a "Delete" button next to each item in the list.
-    *   **Task**: Implement the frontend logic to call your `DELETE` backend API when the button is clicked, and remove the item from the UI state.
+(git rm -r --cached node_modules(kelauynoth)) /git add .
 
----
 
-## Part 3: Deployment (25 Marks)
+git commit -m "Remove accidentally added node_modules"
+git push origin main or git push or git push -f origin main
 
-You must deploy your completed application.
 
-1.  **Backend Deployment (10 Marks)**
-    *   Deploy your backend to a free service like **Render** or **Railway**.
-    *   Ensure you configure the environment variables (`MONGO_URI`) on the deployment platform.
-    *   Note down your deployed backend URL.
 
-2.  **Frontend Deployment (10 Marks)**
-    *   Update your frontend `.env` (or config file) to point API requests to your *deployed* backend URL instead of `http://localhost:5000`.
-    *   Deploy your frontend to a free service like **Vercel** or **Netlify**.
+Render
+Root Directory: backend
+Runtime: Node
+Build Command: npm install
+Start Command: node server.js
+MONGO_URI
+App.jsx replace with url
 
-3.  **Cross-Origin Verification (5 Marks)**
-    *   Ensure your backend CORS configuration allows requests from your deployed frontend URL.
-    *   Verify that you can add and delete items from the deployed frontend.
 
----
 
-## Part 4: Submission (15 Marks)
+Vercel
+Add New -> Project and import
+Framework Preset: Vite
+Root Directory: frontend
+Environment Variables VITE_API_URL https://my-new-backend.onrender.com/api/items
+Add deploy
 
-1.  **GitHub Repository (5 Marks)**
-    *   Initialize a Git repository for your project.
-    *   Commit your completed frontend and backend code.
-    *   Push the code to a **Public GitHub Repository**.
 
-2.  **Documentation & Screenshots (10 Marks)**
-    *   Create a `SUBMISSION.md` file in the root of your GitHub repository.
-    *   Include the following in your `SUBMISSION.md`:
-        *   Link to your deployed Frontend.
-        *   Link to your deployed Backend.
-        *   **Screenshot 1**: The working UI showing items with the new `description` and `category` fields.
-        *   **Screenshot 2**: The MongoDB Atlas collection view showing data has been successfully saved to the cloud database.
-        *   **Screenshot 3**: Proof of successful deployment (e.g., Render/Vercel dashboard showing "Live" or "Success").
 
-**Good Luck!**
+
+
+
+
+
+
+
+router.delete('/:id', async (req, res) => { try { const item = await Item.findByIdAndDelete(req.params.id); if (!item) { return
+res.status(404).json({ message: "Item not found" }); } res.json({ message: "Item deleted successfully" }); } catch (err)
+{ res.status(500).json({ message: err.message }); } });
+router.get('/', async (req, res) => {
+ try {
+ const items = await Item.find();
+ res.json(items);
+ } catch (err) {
+ res.status(500).json({ message: err.message });
+ }
+})
+
+
+
+
+router.post('/', async (req, res) => {
+ const { name, price, description, category } = req.body; // TODO (Student): Read the new fields here
+ const item = new Item({
+ name,
+ price,
+ description,
+ category
+ });
+ try {
+ const savedItem = await item.save();
+ res.status(201).json(savedItem);
+ } catch (err) {
+ res.status(400).json({ message: err.message });
+ }
+});
